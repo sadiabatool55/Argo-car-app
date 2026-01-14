@@ -1,31 +1,29 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.10-slim'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
-        DOCKER_IMAGE = "dockerhub-username/cars-app"
+        DOCKER_IMAGE = "sadia13/cars-app"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git(
-                    url: 'https://github.com/sadiabatool55/Argo-car-app.git',
-                    branch: 'main',
-                    credentialsId: 'github-connect'
-                )
+                git 'https://github.com/sadiabatool55/Argo-car-app.git'
             }
         }
 
-        stage('Build Image') {
+        stage('Build & Push Docker') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE:latest app/'
-            }
-        }
-
-        stage('Push Image') {
-            steps {
-                withDockerRegistry([credentialsId: 'dockerhub-creds']) {
-                    sh 'docker push $DOCKER_IMAGE:latest'
+                script {
+                    def appImage = docker.build("$DOCKER_IMAGE:latest", ".")
+                    docker.withRegistry('', 'dockerhub-creds') {
+                        appImage.push()
+                    }
                 }
             }
         }
