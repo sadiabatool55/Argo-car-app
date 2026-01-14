@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "dockerhub-username/cars-app"
-        branch: 'main'
     }
 
     stages {
