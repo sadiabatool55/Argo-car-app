@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-username/autoscaling-cars-project.git'
+                git 'https://github.com/sadiabatool55/autoscaling-cars-project.git'
             }
         }
 
