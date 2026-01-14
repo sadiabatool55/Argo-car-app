@@ -8,7 +8,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/sadiabatool55/Argo-car-app.git'
+                git(
+                    url: 'https://github.com/sadiabatool55/Argo-car-app.git',
+                    branch: 'main',
+                    credentialsId: 'github-connect'
+                )
             }
         }
 
