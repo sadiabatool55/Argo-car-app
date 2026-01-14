@@ -18,14 +18,14 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                bat 'docker build -t $DOCKER_IMAGE:latest app/'
+                sh 'docker build -t $DOCKER_IMAGE:latest app/'
             }
         }
 
         stage('Push Image') {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhub-creds']) {
-                    bat 'docker push $DOCKER_IMAGE:latest'
+                    sh 'docker push $DOCKER_IMAGE:latest'
                 }
             }
         }
