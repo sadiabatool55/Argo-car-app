@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.10-slim'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     environment {
         DOCKER_IMAGE = "sadia13/cars-app"
@@ -17,12 +12,19 @@ pipeline {
             }
         }
 
-        stage('Build & Push Docker') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    def appImage = docker.build("$DOCKER_IMAGE:latest", ".")
+                    docker.build("${DOCKER_IMAGE}:latest")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
                     docker.withRegistry('', 'dockerhub-creds') {
-                        appImage.push()
+                        docker.image("${DOCKER_IMAGE}:latest").push()
                     }
                 }
             }
