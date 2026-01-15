@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/sadiabatool55/Argo-car-app.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
